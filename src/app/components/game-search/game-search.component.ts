@@ -19,7 +19,7 @@ constructor(
   private localStorageService: LocalStorageService
 ){}
 ngOnInit(): void {
-  this.localStorageService.getGameList(ListType.OWNEDLIST);
+this.localStorageService.getGameList(ListType.OWNEDLIST);
 this.localStorageService.getGameList(ListType.WISHLIST);
 
 this.localStorageService.ownedGames.subscribe(games => this.ownedGames = _.mapKeys(games, 'id'));
@@ -27,5 +27,30 @@ this.localStorageService.wishListGames.subscribe(games => this.wishListGames = _
 }
 search() {
   this.gameService.searchByName(this.searchText).subscribe(games => this.games = games);
+}
+updateOwnedList(event: MouseEvent, game: Game) {
+  event.stopPropagation();
+
+  if (this.ownedGames[game.id]) {
+      this.localStorageService.deleteGame(game, ListType.OWNEDLIST);
+  } else {
+      if (this.wishListGames[game.id]) {
+          this.localStorageService.deleteGame(game, ListType.WISHLIST);
+      }
+      this.localStorageService.saveGame(game, ListType.OWNEDLIST);
+  }
+}
+
+updateWishlist(event: MouseEvent, game: Game) {
+  event.stopPropagation();
+
+  if (this.wishListGames[game.id]) {
+      this.localStorageService.deleteGame(game, ListType.WISHLIST);
+  } else {
+      if (this.ownedGames[game.id]) {
+          this.localStorageService.deleteGame(game, ListType.OWNEDLIST);
+      }
+      this.localStorageService.saveGame(game, ListType.WISHLIST);
+  }
 }
 }

@@ -8,7 +8,7 @@
       margin-left: 5px;
     }
 
-    .mat-form-field {
+    mat-form-field {
         width: 50%;
         margin-top: 16px;
     }
@@ -42,10 +42,18 @@
     .mat-card-title {
       font-size: 1em;
       line-height: normal;
+      
     }
   }
   
   .mat-card-content {
-    font-size: .75em;
+    font-size: 1em;
     line-height: normal;
   }
+  mat-card-actions {
+    display: flex;
+    justify-content: space-around;
+  }
+  .selected-icon {
+  margin-right: 5px;
+}
