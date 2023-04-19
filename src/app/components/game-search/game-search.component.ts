@@ -4,17 +4,20 @@ import { GameService } from 'src/app/services/game.service';
 import { LocalStorageService } from 'src/app/services/local-storage.service';
 import { ListType } from 'src/app/enums/list-type';
 import * as _ from 'lodash';
+import { Router } from '@angular/router';
 @Component({
   selector: 'app-game-search',
   templateUrl: './game-search.component.html',
   styleUrls: ['./game-search.component.scss']
 })
 export class GameSearchComponent implements OnInit{
+  
 searchText!: string;
 games: Game[] = [];
 ownedGames: {[id: string]: Game} = {};
 wishListGames: {[id: string]: Game} = {};
 constructor(
+  private router: Router,
   private gameService: GameService,
   private localStorageService: LocalStorageService
 ){}
@@ -25,6 +28,7 @@ this.localStorageService.getGameList(ListType.WISHLIST);
 this.localStorageService.ownedGames.subscribe(games => this.ownedGames = _.mapKeys(games, 'id'));
 this.localStorageService.wishListGames.subscribe(games => this.wishListGames = _.mapKeys(games, 'id'));
 }
+
 search() {
   this.gameService.searchByName(this.searchText).subscribe(games => this.games = games);
 }
@@ -52,5 +56,8 @@ updateWishlist(event: MouseEvent, game: Game) {
       }
       this.localStorageService.saveGame(game, ListType.WISHLIST);
   }
+}
+goToGameDetails(game: Game) {
+  this.router.navigate(['./game-details', { gameId: game.id }]);
 }
 }
